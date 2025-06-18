@@ -12,18 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Update README with ArgoCD app versions
+        uses: ./argocd-app-version-action
         with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./argocd-app-version-action
-
-      - name: Run action to update README
-        run: node src/index.js
-        working-directory: ./argocd-app-version-action
+          argocd_server: ${{ secrets.ARGOCD_SERVER }}
+          argocd_token: ${{ secrets.ARGOCD_TOKEN }}
 
       - name: Commit and push changes
         run: |
