@@ -1,24 +1,15 @@
 {
   "name": "argocd-app-version-action",
   "version": "1.0.0",
-  "description": "A GitHub Action to connect to ArgoCD and update the README with application versions.",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"No tests specified\" && exit 0"
-  },
-  "dependencies": {
-    "@actions/core": "^1.10.0",
-    "@actions/github": "^5.0.0",
-    "axios": "^0.21.1"
-  },
-  "devDependencies": {
-    "eslint": "^7.32.0"
-  },
+  "description": "A GitHub Action to connect to ArgoCD and update the README with application versions using Python.",
+  "main": "src/main.py",
+  "scripts": {},
   "keywords": [
     "github-action",
     "argocd",
     "version",
-    "readme"
+    "readme",
+    "python"
   ],
   "author": "Your Name",
   "license": "MIT"

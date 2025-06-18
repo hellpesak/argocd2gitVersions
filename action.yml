@@ -1,5 +1,5 @@
 name: 'ArgoCD App Version Action'
-description: 'A GitHub Action to connect to ArgoCD and update the README with application versions.'
+description: 'A GitHub Action to connect to ArgoCD and update the README with application versions using Python.'
 inputs:
   argocd_server:
     description: 'The ArgoCD server URL.'
@@ -7,12 +7,19 @@ inputs:
   argocd_token:
     description: 'The ArgoCD authentication token.'
     required: true
-  git_repo:
-    description: 'The Git repository to update.'
-    required: true
-  git_token:
-    description: 'The GitHub token for authentication.'
-    required: true
 runs:
-  using: 'node12'
-  main: 'src/index.js'
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - name: Install dependencies
+      run: pip install requests
+      shell: bash
+    - name: Run ArgoCD App Version Python script
+      run: python src/main.py
+      shell: bash
+      env:
+        ARGOCD_SERVER: ${{ inputs.argocd_server }}
+        ARGOCD_TOKEN: ${{ inputs.argocd_token }}

@@ -1,24 +1,14 @@
 # ArgoCD App Version Action
 
-This GitHub Action connects to ArgoCD to retrieve the list of applications and their respective versions running in your cluster. It then updates the README file in your Git repository with this information.
+This GitHub Action connects to ArgoCD using the ArgoCD API (no CLI or Node.js required) to retrieve the list of applications and their respective versions running in your cluster. It then updates the README file in your Git repository with this information.
 
 ## Getting Started
 
-1. **Install the ArgoCD CLI**  
-   Make sure the [ArgoCD CLI](https://argo-cd.readthedocs.io/en/stable/cli_installation/) is available in your GitHub Actions runner.  
-   You can add a step in your workflow to install it, for example:
-   ```yaml
-   - name: Install ArgoCD CLI
-     run: |
-       curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-       chmod +x /usr/local/bin/argocd
-   ```
-
-2. **Create ArgoCD API Token**  
+1. **Create ArgoCD API Token**  
    Generate an API token in ArgoCD and add it as a GitHub secret (e.g., `ARGOCD_TOKEN`).  
    Also add your ArgoCD server URL as a secret (e.g., `ARGOCD_SERVER`).
 
-3. **Reference the Action in Your Workflow**  
+2. **Reference the Action in Your Workflow**  
    Use the action in your workflow as shown below.
 
 ## Usage
@@ -40,16 +30,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install ArgoCD CLI
-        run: |
-          curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-          chmod +x /usr/local/bin/argocd
-
       - name: Update README with ArgoCD app versions
         uses: ./argocd-app-version-action
         with:
           argocd_server: ${{ secrets.ARGOCD_SERVER }}
           argocd_token: ${{ secrets.ARGOCD_TOKEN }}
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update README with ArgoCD apps and versions"
+          git push
+        working-directory: ./argocd-app-version-action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Example Output
