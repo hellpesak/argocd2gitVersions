@@ -1,0 +1,18 @@
+name: 'ArgoCD App Version Action'
+description: 'A GitHub Action to connect to ArgoCD and update the README with application versions.'
+inputs:
+  argocd_server:
+    description: 'The ArgoCD server URL.'
+    required: true
+  argocd_token:
+    description: 'The ArgoCD authentication token.'
+    required: true
+  git_repo:
+    description: 'The Git repository to update.'
+    required: true
+  git_token:
+    description: 'The GitHub token for authentication.'
+    required: true
+runs:
+  using: 'node12'
+  main: 'src/index.js'
